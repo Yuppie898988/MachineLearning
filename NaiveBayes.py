@@ -9,7 +9,7 @@ from sklearn.model_selection import KFold
 import numpy as np
 
 
-def gaussian(x, std, mean):
+def gaussian(x, std, mean):     # 对向量进行高斯运算并相乘
     return np.prod(1 / (np.sqrt(2 * np.pi) * std) * np.exp(-1 * (x - mean)**2 / (2 * std**2)))
 
 
@@ -32,7 +32,7 @@ class NaiveBayes:
         probability = np.zeros((x_test.shape[0], 3))    # 行表示x_test各样本值，列表示y取值，(i,j)表示第i个样本在y=j下各分量概率乘积
         for i in range(x_test.shape[0]):
             for j in range(3):
-                probability[i][j] = gaussian(x_test[i], self.std[j], self.mean[j])
+                probability[i][j] = gaussian(x_test[i], self.std[j], self.mean[j])  # gaussian()返回向量各特征的概率的连乘
             probability[i] *= self.P_y
         return probability
 
@@ -48,7 +48,7 @@ class NaiveBayes:
 
 
 data, target = datasets.load_iris(return_X_y=True)
-kf = KFold(n_splits=5, shuffle=True)
+kf = KFold(n_splits=5, shuffle=True, random_state=0)
 accuracy = np.zeros(5)
 it = 0
 for train_index, test_index in kf.split(data):
